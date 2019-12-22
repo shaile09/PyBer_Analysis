@@ -17,7 +17,8 @@ To get the percentage of each city (including ride percentages), we used a pie c
 
 ![](analysis/Fig6.png)
 
-# Challenge 5
+# Challenge 5 (part 1 and 2)
+# Part One 
 The goal is to create an overall snapshot of the ride- sharing data. In addition to the scatter and pie charts we have created, our client would like to see a summary table of key metrics of the ride sharing data by city type, and a multiple-line graph that shows the average fare for each week by each city. To complete this, we used pandas to complete the following objectives:
 -	Use groupby, pivot, resample, and reset index on a Dataframe
 -	Use methods and attributes on a Datafarme or Series 
@@ -33,7 +34,17 @@ In part one, we created a summary data frame that shows the total riders, driver
 
 The table shows that there are more riders in the urban areas (1,625 total riders), 625 total riders in suburban areas, and 125 in rural areas. The total average riders is also the similar with urban areas having the most drivers and rural areas having the least. Similarly, the total fares are higher in the urban areas when compared to the suburban and rural areas. The average fare per rider and driver are lower in urban cities when compared  to the suburban and rural.  
 
+# Part 2
 
-For part two of this challenges, we created a multiple-line plot for the sum of the fares for each city type. The graph below shows the total fare for each city (rural, suburban and urban).
+For part two of this challenges, we created a multiple-line plot for the sum of the fares for each city type. The graph below shows the total fare for each city (rural, suburban and urban). The graph below shows us that the the fares for each city type over time.
+
+In Rural cities - the total fare will be under $500 based on the graph below in January, February, March, and April. This is the lowest total fare when compared to Suburban and Urban cities.
+
+In Suburban cities - the total fare will be under $1,500 based on the graph below in January, February, March, and April. This is higher than rural cites, but lower than Urban cities. 
+
+In Urban cities - the highest total fare is $2,500 based on the graph below  in January, February, March, and April. Urban cities have the highest total fares when compared to rural and suburban cities. 
+
+This graph shows us that overtime, the all cities are staying consistent by month. We would expect to see a similar graph for May, June, July and August for the three cities. 
+
 
 ![](analysis/part2.png)
