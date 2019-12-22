@@ -1,0 +1,986 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Add Matplotlib inline magic command\n",
+    "%matplotlib inline\n",
+    "# Add all dependecies to data \n",
+    "import matplotlib.pyplot as plt\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Files to load from the csv files (city_date and ride_data)\n",
+    "city_data_to_load = \"Resources/city_data.csv\"\n",
+    "ride_data_to_load = \"Resources/ride_data.csv\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>city</th>\n",
+       "      <th>driver_count</th>\n",
+       "      <th>type</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Richardfort</td>\n",
+       "      <td>38</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Williamsstad</td>\n",
+       "      <td>59</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Port Angela</td>\n",
+       "      <td>67</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Rodneyfort</td>\n",
+       "      <td>34</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>West Robert</td>\n",
+       "      <td>39</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>West Anthony</td>\n",
+       "      <td>70</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>West Angela</td>\n",
+       "      <td>48</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>Martinezhaven</td>\n",
+       "      <td>25</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>Karenberg</td>\n",
+       "      <td>22</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>Barajasview</td>\n",
+       "      <td>26</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            city  driver_count   type\n",
+       "0    Richardfort            38  Urban\n",
+       "1   Williamsstad            59  Urban\n",
+       "2    Port Angela            67  Urban\n",
+       "3     Rodneyfort            34  Urban\n",
+       "4    West Robert            39  Urban\n",
+       "5   West Anthony            70  Urban\n",
+       "6    West Angela            48  Urban\n",
+       "7  Martinezhaven            25  Urban\n",
+       "8      Karenberg            22  Urban\n",
+       "9    Barajasview            26  Urban"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Read the city data file and store it in a pandas DataFrame.\n",
+    "city_data_df = pd.read_csv(city_data_to_load)\n",
+    "city_data_df.head(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>city</th>\n",
+       "      <th>date</th>\n",
+       "      <th>fare</th>\n",
+       "      <th>ride_id</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Lake Jonathanshire</td>\n",
+       "      <td>14/01/2019 10:14</td>\n",
+       "      <td>13.83</td>\n",
+       "      <td>5.739410e+12</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>South Michelleport</td>\n",
+       "      <td>04/03/2019 18:24</td>\n",
+       "      <td>30.24</td>\n",
+       "      <td>2.343910e+12</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Port Samanthamouth</td>\n",
+       "      <td>24/02/2019 04:29</td>\n",
+       "      <td>33.44</td>\n",
+       "      <td>2.005070e+12</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Rodneyfort</td>\n",
+       "      <td>10/02/2019 23:22</td>\n",
+       "      <td>23.44</td>\n",
+       "      <td>5.149250e+12</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>South Jack</td>\n",
+       "      <td>06/03/2019 04:28</td>\n",
+       "      <td>34.58</td>\n",
+       "      <td>3.908450e+12</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>South Latoya</td>\n",
+       "      <td>11/03/2019 12:26</td>\n",
+       "      <td>9.52</td>\n",
+       "      <td>1.995000e+12</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>New Paulville</td>\n",
+       "      <td>27/02/2019 11:17</td>\n",
+       "      <td>43.25</td>\n",
+       "      <td>7.932080e+11</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>Simpsonburgh</td>\n",
+       "      <td>26/04/2019 00:43</td>\n",
+       "      <td>35.98</td>\n",
+       "      <td>1.119540e+11</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>South Karenland</td>\n",
+       "      <td>08/01/2019 03:28</td>\n",
+       "      <td>35.09</td>\n",
+       "      <td>7.995620e+12</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>North Jasmine</td>\n",
+       "      <td>09/03/2019 06:26</td>\n",
+       "      <td>42.81</td>\n",
+       "      <td>5.327640e+12</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                 city              date   fare       ride_id\n",
+       "0  Lake Jonathanshire  14/01/2019 10:14  13.83  5.739410e+12\n",
+       "1  South Michelleport  04/03/2019 18:24  30.24  2.343910e+12\n",
+       "2  Port Samanthamouth  24/02/2019 04:29  33.44  2.005070e+12\n",
+       "3          Rodneyfort  10/02/2019 23:22  23.44  5.149250e+12\n",
+       "4          South Jack  06/03/2019 04:28  34.58  3.908450e+12\n",
+       "5        South Latoya  11/03/2019 12:26   9.52  1.995000e+12\n",
+       "6       New Paulville  27/02/2019 11:17  43.25  7.932080e+11\n",
+       "7        Simpsonburgh  26/04/2019 00:43  35.98  1.119540e+11\n",
+       "8     South Karenland  08/01/2019 03:28  35.09  7.995620e+12\n",
+       "9       North Jasmine  09/03/2019 06:26  42.81  5.327640e+12"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ride_data_df = pd.read_csv(ride_data_to_load)\n",
+    "ride_data_df.head(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "city            120\n",
+       "driver_count    120\n",
+       "type            120\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Get the columns and the rows that are not null.\n",
+    "city_data_df.count()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "city            0\n",
+       "driver_count    0\n",
+       "type            0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Get the columns and the rows that are not null.\n",
+    "city_data_df.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "city            object\n",
+       "driver_count     int64\n",
+       "type            object\n",
+       "dtype: object"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Get the data types of each column.\n",
+    "city_data_df.dtypes"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array(['Urban', 'Suburban', 'Rural'], dtype=object)"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Get the unique values of the type of city.\n",
+    "city_data_df[\"type\"].unique()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "66"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Get the number of data points from the Urban cities.\n",
+    "sum(city_data_df[\"type\"]==\"Urban\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "36"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Get the number of data points from the Suburban cities.\n",
+    "sum(city_data_df[\"type\"]==\"Suburban\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "18"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "sum(city_data_df[\"type\"]==\"Rural\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Combine the data into a single dataset\n",
+    "pyber_data_df = pd.merge(ride_data_df, city_data_df, how=\"left\", on=[\"city\", \"city\"])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>city</th>\n",
+       "      <th>date</th>\n",
+       "      <th>fare</th>\n",
+       "      <th>ride_id</th>\n",
+       "      <th>driver_count</th>\n",
+       "      <th>type</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Lake Jonathanshire</td>\n",
+       "      <td>14/01/2019 10:14</td>\n",
+       "      <td>13.83</td>\n",
+       "      <td>5.739410e+12</td>\n",
+       "      <td>5</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>South Michelleport</td>\n",
+       "      <td>04/03/2019 18:24</td>\n",
+       "      <td>30.24</td>\n",
+       "      <td>2.343910e+12</td>\n",
+       "      <td>72</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Port Samanthamouth</td>\n",
+       "      <td>24/02/2019 04:29</td>\n",
+       "      <td>33.44</td>\n",
+       "      <td>2.005070e+12</td>\n",
+       "      <td>57</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Rodneyfort</td>\n",
+       "      <td>10/02/2019 23:22</td>\n",
+       "      <td>23.44</td>\n",
+       "      <td>5.149250e+12</td>\n",
+       "      <td>34</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>South Jack</td>\n",
+       "      <td>06/03/2019 04:28</td>\n",
+       "      <td>34.58</td>\n",
+       "      <td>3.908450e+12</td>\n",
+       "      <td>46</td>\n",
+       "      <td>Urban</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                 city              date   fare       ride_id  driver_count  \\\n",
+       "0  Lake Jonathanshire  14/01/2019 10:14  13.83  5.739410e+12             5   \n",
+       "1  South Michelleport  04/03/2019 18:24  30.24  2.343910e+12            72   \n",
+       "2  Port Samanthamouth  24/02/2019 04:29  33.44  2.005070e+12            57   \n",
+       "3          Rodneyfort  10/02/2019 23:22  23.44  5.149250e+12            34   \n",
+       "4          South Jack  06/03/2019 04:28  34.58  3.908450e+12            46   \n",
+       "\n",
+       "    type  \n",
+       "0  Urban  \n",
+       "1  Urban  \n",
+       "2  Urban  \n",
+       "3  Urban  \n",
+       "4  Urban  "
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pyber_data_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create all the types of cities DataFrames.\n",
+    "urban_cities_df = pyber_data_df[pyber_data_df[\"type\"] == \"Urban\"]\n",
+    "suburban_cities_df = pyber_data_df[pyber_data_df[\"type\"] == \"Suburban\"]\n",
+    "rural_cities_df = pyber_data_df[pyber_data_df[\"type\"] == \"Rural\"]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "type\n",
+       "Rural       55.486282\n",
+       "Suburban    39.502714\n",
+       "Urban       16.571468\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Calculate the average fare per driver.\n",
+    "avg_fare_per_driver = pyber_data_df.groupby([\"type\"]).sum()[\"fare\"] / city_data_df.groupby([\"type\"])[\"driver_count\"].sum()\n",
+    "avg_fare_per_driver"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>city</th>\n",
+       "      <th>date</th>\n",
+       "      <th>fare</th>\n",
+       "      <th>ride_id</th>\n",
+       "      <th>driver_count</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>type</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>Urban</th>\n",
+       "      <td>Lake Jonathanshire</td>\n",
+       "      <td>14/01/2019 10:14</td>\n",
+       "      <td>13.83</td>\n",
+       "      <td>5.739410e+12</td>\n",
+       "      <td>5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Urban</th>\n",
+       "      <td>South Michelleport</td>\n",
+       "      <td>04/03/2019 18:24</td>\n",
+       "      <td>30.24</td>\n",
+       "      <td>2.343910e+12</td>\n",
+       "      <td>72</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Urban</th>\n",
+       "      <td>Port Samanthamouth</td>\n",
+       "      <td>24/02/2019 04:29</td>\n",
+       "      <td>33.44</td>\n",
+       "      <td>2.005070e+12</td>\n",
+       "      <td>57</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Urban</th>\n",
+       "      <td>Rodneyfort</td>\n",
+       "      <td>10/02/2019 23:22</td>\n",
+       "      <td>23.44</td>\n",
+       "      <td>5.149250e+12</td>\n",
+       "      <td>34</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Urban</th>\n",
+       "      <td>South Jack</td>\n",
+       "      <td>06/03/2019 04:28</td>\n",
+       "      <td>34.58</td>\n",
+       "      <td>3.908450e+12</td>\n",
+       "      <td>46</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Rural</th>\n",
+       "      <td>Michaelberg</td>\n",
+       "      <td>29/04/2019 17:04</td>\n",
+       "      <td>13.38</td>\n",
+       "      <td>8.550370e+12</td>\n",
+       "      <td>6</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Rural</th>\n",
+       "      <td>Lake Latoyabury</td>\n",
+       "      <td>30/01/2019 00:05</td>\n",
+       "      <td>20.76</td>\n",
+       "      <td>9.018730e+12</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Rural</th>\n",
+       "      <td>North Jaime</td>\n",
+       "      <td>10/02/2019 21:03</td>\n",
+       "      <td>11.11</td>\n",
+       "      <td>2.781340e+12</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Rural</th>\n",
+       "      <td>West Heather</td>\n",
+       "      <td>07/05/2019 19:22</td>\n",
+       "      <td>44.94</td>\n",
+       "      <td>4.256850e+12</td>\n",
+       "      <td>4</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Rural</th>\n",
+       "      <td>Newtonview</td>\n",
+       "      <td>25/04/2019 10:20</td>\n",
+       "      <td>55.84</td>\n",
+       "      <td>9.990580e+12</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>2375 rows × 5 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                     city              date   fare       ride_id  driver_count\n",
+       "type                                                                          \n",
+       "Urban  Lake Jonathanshire  14/01/2019 10:14  13.83  5.739410e+12             5\n",
+       "Urban  South Michelleport  04/03/2019 18:24  30.24  2.343910e+12            72\n",
+       "Urban  Port Samanthamouth  24/02/2019 04:29  33.44  2.005070e+12            57\n",
+       "Urban          Rodneyfort  10/02/2019 23:22  23.44  5.149250e+12            34\n",
+       "Urban          South Jack  06/03/2019 04:28  34.58  3.908450e+12            46\n",
+       "...                   ...               ...    ...           ...           ...\n",
+       "Rural         Michaelberg  29/04/2019 17:04  13.38  8.550370e+12             6\n",
+       "Rural     Lake Latoyabury  30/01/2019 00:05  20.76  9.018730e+12             2\n",
+       "Rural         North Jaime  10/02/2019 21:03  11.11  2.781340e+12             1\n",
+       "Rural        West Heather  07/05/2019 19:22  44.94  4.256850e+12             4\n",
+       "Rural          Newtonview  25/04/2019 10:20  55.84  9.990580e+12             1\n",
+       "\n",
+       "[2375 rows x 5 columns]"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Determine the city type.\n",
+    "per_city_types = pyber_data_df.set_index([\"type\"])\n",
+    "per_city_types"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'type_of_city_ride_count' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[1;32m<ipython-input-17-f0fd4fdf2947>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m\u001b[0m\n\u001b[0;32m      1\u001b[0m \u001b[1;31m# Adding a list of values with keys to create a new DataFrame.\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m      2\u001b[0m pyber_summary_df = pd.DataFrame({\n\u001b[1;32m----> 3\u001b[1;33m           \u001b[1;34m\"Total Rides\"\u001b[0m\u001b[1;33m:\u001b[0m \u001b[0mtype_of_city_ride_count\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m      4\u001b[0m           \u001b[1;34m\"Total Drivers\"\u001b[0m\u001b[1;33m:\u001b[0m \u001b[0mtype_of_city_driver_total\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m      5\u001b[0m           \u001b[1;34m\"Total Fares\"\u001b[0m\u001b[1;33m:\u001b[0m \u001b[0mtype_of_city_fare_total\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
+      "\u001b[1;31mNameError\u001b[0m: name 'type_of_city_ride_count' is not defined"
+     ]
+    }
+   ],
+   "source": [
+    "# Adding a list of values with keys to create a new DataFrame.\n",
+    "pyber_summary_df = pd.DataFrame({\n",
+    "          \"Total Rides\": type_of_city_ride_count,\n",
+    "          \"Total Drivers\": type_of_city_driver_total,\n",
+    "          \"Total Fares\": type_of_city_fare_total,\n",
+    "          \"Average Fare per Ride\": avg_fare_per_ride,\n",
+    "          \"Average Fare per Driver\": avg_fare_per_driver})\n",
+    "# Remove the index name.\n",
+    "pyber_summary_df.index.name = None\n",
+    "pyber_summary_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pyber_summary_df.info()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Format the pyber summary.\n",
+    "pyber_summary_df[\"Total Fares\"] = pyber_summary_df[\"Total Fares\"].map(\"${:,.2f}\".format)\n",
+    "\n",
+    "pyber_summary_df[\"Average Fare per Ride\"] = pyber_summary_df[\"Average Fare per Ride\"].map(\"${:,.2f}\".format)\n",
+    "\n",
+    "pyber_summary_df[\"Average Fare per Driver\"] = pyber_summary_df[\"Average Fare per Driver\"].map(\"${:,.2f}\".format)\n",
+    "\n",
+    "# Display the DataFrame.\n",
+    "pyber_summary_df\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Get the index of column names from the merged data file\n",
+    "pyber_data_df.columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Rename the columns in the merged DataFrame\n",
+    "pyber_data_df.rename(columns = {'city':'City', 'date':'Date', 'fare':'Fare', 'ride_id':'Ride Id', 'driver_count':'No Drivers', 'type':'City Type'}, inplace=True)\n",
+    "# List index of new column names\n",
+    "pyber_data_df.columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Set the dataframe to the 'Date' column\n",
+    "pyber_data_df.set_index('Date')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# make a new dataframe by using the copy() method from the merged data\n",
+    "fares_summary_df = pyber_data_df[['Date', 'Fare', 'City Type']].copy()\n",
+    "fares_summary_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Set the index to the 'Date' column\n",
+    "fares_summary_df['Date'] = pd.to_datetime(fares_summary_df['Date'])\n",
+    "fares_summary_df.set_index('Date', inplace = True)\n",
+    "fares_summary_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Check the DataFrame using the info() method to make sure the index is a datetime data type.\n",
+    "fares_summary_df.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Calculate the sum() of fares by the type of city and date using groupby() to create a new DataFrame.\n",
+    "# Get the total fares for each type of city.\n",
+    "city_total_fare = fares_summary_df.groupby([\"City Type\", \"Date\"]).sum()[\"Fare\"]\n",
+    "city_total_fare = pd.DataFrame(city_total_fare)\n",
+    "city_total_fare.head"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Reset index\n",
+    "city_total_fare = city_total_fare.reset_index()\n",
+    "city_total_fare.head(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create a pivot table DataFrame with the Date as the index and columns = 'City Type' \n",
+    "pivot_fares_df = city_total_fare.pivot(index=\"Date\", columns=\"City Type\")[\"Fare\"]\n",
+    "# pivot_fares_df = pd.pivot_table(fares_summary_df, index =['Date'], columns =['City Type'], aggfunc = np.sum)\n",
+    "pivot_fares_df.head(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pivot_fares_df.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create new dataFrame from the pivot table DataFrame on the given dates '2019-01-01':'2019-04-28' using loc.\n",
+    "fares_date_df = pivot_fares_df.loc['2019-01-01':'2019-04-28']\n",
+    "fares_date_df.head(20)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create a new DataFrame by setting the DataFrame with resample() in weekly bins, and calculate the sum() of the fares for each week.\n",
+    "resample_df = fares_date_df.resample('W').sum()\n",
+    "resample_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#plot line polot \n",
+    "\n",
+    "from matplotlib.pyplot import style \n",
+    "style.use('fivethirtyeight') \n",
+    "\n",
+    "lineplot = resample_df.plot(figsize=(20,6))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "PythonData",
+   "language": "python",
+   "name": "pythondata"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
